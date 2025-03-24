@@ -1,9 +1,6 @@
 package com.codingshuttle.projects.airBnbApp.controller;
 
-import com.codingshuttle.projects.airBnbApp.dto.HotelDto;
-import com.codingshuttle.projects.airBnbApp.dto.HotelInfoDto;
-import com.codingshuttle.projects.airBnbApp.dto.HotelPriceDto;
-import com.codingshuttle.projects.airBnbApp.dto.HotelSearchRequest;
+import com.codingshuttle.projects.airBnbApp.dto.*;
 import com.codingshuttle.projects.airBnbApp.service.HotelService;
 import com.codingshuttle.projects.airBnbApp.service.InventoryService;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +21,14 @@ public class HotelBrowseController {
         Page<HotelDto> searchedResult = inventoryService.searchHotels(hotelSearchRequest);
         return ResponseEntity.ok(searchedResult);
     }*/
-    public ResponseEntity<Page<HotelPriceDto>> searchHotels(@RequestBody HotelSearchRequest hotelSearchRequest) {
-        Page<HotelPriceDto> searchedResult = inventoryService.searchHotels(hotelSearchRequest);
+    public ResponseEntity<Page<HotelPriceResponseDto>> searchHotels(@RequestBody HotelSearchRequest hotelSearchRequest) {
+        var searchedResult = inventoryService.searchHotels(hotelSearchRequest);
         return ResponseEntity.ok(searchedResult);
     }
 
     @GetMapping("/{hotelId}/info")
-    public ResponseEntity<HotelInfoDto> getHotelInfoById(@PathVariable Long hotelId) {
-        HotelInfoDto hotelInfoDto = hotelService.getHotelInfoById(hotelId);
+    public ResponseEntity<HotelInfoDto> getHotelInfoById(@PathVariable Long hotelId, @RequestBody HotelInfoRequestDto hotelInfoRequestDto) {
+        HotelInfoDto hotelInfoDto = hotelService.getHotelInfoById(hotelId, hotelInfoRequestDto);
         return ResponseEntity.ok(hotelInfoDto);
     }
 

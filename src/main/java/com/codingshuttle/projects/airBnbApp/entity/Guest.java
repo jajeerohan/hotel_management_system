@@ -4,6 +4,11 @@ import com.codingshuttle.projects.airBnbApp.entity.enums.Gender;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -24,7 +29,12 @@ public class Guest {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private Integer age;
+    private LocalDate dateOfBirth;
 
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
 }

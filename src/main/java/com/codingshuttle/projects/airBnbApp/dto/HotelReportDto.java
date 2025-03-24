@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HotelInfoDto {
-    private HotelDto hotelDto;
-    private List<RoomPriceResponseDto> roomDtoList;
+public class HotelReportDto {
+    private Long bookingCount;
+    private BigDecimal totalRevenue;
+    private BigDecimal avgRevenue;
 }

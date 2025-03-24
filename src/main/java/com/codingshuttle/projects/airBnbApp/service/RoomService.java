@@ -1,6 +1,7 @@
 package com.codingshuttle.projects.airBnbApp.service;
 
 import com.codingshuttle.projects.airBnbApp.dto.RoomDto;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ public interface RoomService {
 
     void deleteRoomById(Long roomId);
 
+    RoomDto updateRoomById(Long hotelId, Long roomId, RoomDto roomDto);
 }

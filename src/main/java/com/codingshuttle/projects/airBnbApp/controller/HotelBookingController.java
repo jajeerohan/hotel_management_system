@@ -2,6 +2,7 @@ package com.codingshuttle.projects.airBnbApp.controller;
 
 import com.codingshuttle.projects.airBnbApp.dto.BookingDto;
 import com.codingshuttle.projects.airBnbApp.dto.BookingRequest;
+import com.codingshuttle.projects.airBnbApp.dto.BookingStatusResponseDto;
 import com.codingshuttle.projects.airBnbApp.dto.GuestDto;
 import com.codingshuttle.projects.airBnbApp.entity.enums.BookingStatus;
 import com.codingshuttle.projects.airBnbApp.service.BookingService;
@@ -27,8 +28,8 @@ public class HotelBookingController {
 
     @PostMapping("/{bookingId}/guests")
     public ResponseEntity<BookingDto> addGuests(@PathVariable Long bookingId,
-                                                @RequestBody List<GuestDto> guestDtoList) {
-        return ResponseEntity.ok(bookingService.addGuests(bookingId, guestDtoList));
+                                                @RequestBody List<Long> guestIdList) {
+        return ResponseEntity.ok(bookingService.addGuests(bookingId, guestIdList));
     }
 
     @PostMapping("/{bookingId}/payments")
@@ -44,8 +45,8 @@ public class HotelBookingController {
     }
 
     @PostMapping("/{bookingId}/status")
-    public ResponseEntity<BookingStatus> getBookingStatus(@PathVariable Long bookingId) {
+    public ResponseEntity<BookingStatusResponseDto> getBookingStatus(@PathVariable Long bookingId) {
         BookingStatus bookingStatus = bookingService.getBookingStatus(bookingId);
-        return ResponseEntity.ok(bookingStatus);
+        return ResponseEntity.ok(new BookingStatusResponseDto(bookingStatus));
     }
 }

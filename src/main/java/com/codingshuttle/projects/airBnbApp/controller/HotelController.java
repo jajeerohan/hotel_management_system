@@ -1,6 +1,9 @@
 package com.codingshuttle.projects.airBnbApp.controller;
 
+import com.codingshuttle.projects.airBnbApp.dto.BookingDto;
 import com.codingshuttle.projects.airBnbApp.dto.HotelDto;
+import com.codingshuttle.projects.airBnbApp.dto.HotelReportDto;
+import com.codingshuttle.projects.airBnbApp.service.BookingService;
 import com.codingshuttle.projects.airBnbApp.service.HotelService;
 import com.codingshuttle.projects.airBnbApp.service.PricingUpdateService;
 import lombok.RequiredArgsConstructor;
@@ -9,14 +12,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.util.List;
+
 @RestController
 @RequestMapping("/admin/hotels")
 @RequiredArgsConstructor
 @Slf4j
 public class HotelController {
 
-    public final HotelService hotelService;
-    public final PricingUpdateService pricingUpdateService;
+    private final HotelService hotelService;
+    private final BookingService bookingService;
+    private final PricingUpdateService pricingUpdateService;
 
     @PostMapping
     public ResponseEntity<HotelDto> createNewHotel(@RequestBody HotelDto hotelDto) {
@@ -50,7 +58,34 @@ public class HotelController {
     public ResponseEntity<Void> activateHotel(@PathVariable Long hotelId) {
         log.info("Controller attempting to partially update hotel with id: {}", hotelId);
         hotelService.activateHotelById(hotelId);
-//        pricingUpdateService.updatePrices();
+        pricingUpdateService.updatePrices();
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<HotelDto>> getAllHotels() {
+        return ResponseEntity.ok(hotelService.getAllHotels());
+    }
+
+    @GetMapping("/booking/{hotelId}")
+    public ResponseEntity<List<BookingDto>> getAllBookingsByHotelId(@PathVariable Long hotelId) {
+        return ResponseEntity.ok(bookingService.getAllBookingsByHotelId(hotelId));
+    }
+
+    @GetMapping("/{hotelId}/reports")
+    public ResponseEntity<HotelReportDto> getHotelReport(@PathVariable Long hotelId,
+                                                         @RequestParam(required = false) LocalDate startDate,
+                                                         @RequestParam(required = false) LocalDate endDate) {
+        if(endDate == null) {
+            endDate = LocalDate.now();
+            if(startDate == null) {
+                startDate = LocalDate.now().minusMonths(1);
+                if(!endDate.isAfter(startDate)) {
+                    throw new IllegalStateException("StartDate cannot to later to EndDate");
+                }
+            }
+        }
+
+        return ResponseEntity.ok(bookingService.getHotelReport(hotelId, startDate, endDate));
     }
 }
